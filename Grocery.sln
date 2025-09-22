@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Grocery.Core", "Grocery.Cor
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Grocery.Core.Data", "Grocery.Core.Data\Grocery.Core.Data.csproj", "{BB53C5AE-ACA5-4A8F-AA87-86CF994A028D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Grocery.UnitTests", "Grocery.UnitTests\Grocery.UnitTests.csproj", "{0DB2B008-E0D7-418A-A9EC-82EF356FC89A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -29,8 +31,15 @@ Global
 		{BB53C5AE-ACA5-4A8F-AA87-86CF994A028D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BB53C5AE-ACA5-4A8F-AA87-86CF994A028D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BB53C5AE-ACA5-4A8F-AA87-86CF994A028D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0DB2B008-E0D7-418A-A9EC-82EF356FC89A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0DB2B008-E0D7-418A-A9EC-82EF356FC89A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0DB2B008-E0D7-418A-A9EC-82EF356FC89A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0DB2B008-E0D7-418A-A9EC-82EF356FC89A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {D30B6735-97E9-4671-8AE2-3D0B9730E993}
 	EndGlobalSection
 EndGlobal
