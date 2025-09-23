@@ -7,6 +7,6 @@ namespace Grocery.Core.Interfaces.Services
     {
         Client? Login(string email, string password);
 
-        Client? Register(string email, string password, string name);
+        Client Register(string email, string password, string name);
     }
 }

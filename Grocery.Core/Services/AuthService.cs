@@ -1,6 +1,7 @@
 ﻿using Grocery.Core.Helpers;
 using Grocery.Core.Interfaces.Services;
 using Grocery.Core.Models;
+using Grocery.Core.Exceptions;
 
 namespace Grocery.Core.Services
 {
@@ -19,19 +20,19 @@ namespace Grocery.Core.Services
             return null;
         }
 
-        public Client? Register(string email, string password, string name)
+        public Client Register(string email, string password, string name)
         {
             // Check if all fields are filled.
-            if (string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(name) || string.IsNullOrWhiteSpace(password)) return null;
+            if (string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(name) || string.IsNullOrWhiteSpace(password)) throw new ArgumentException();
 
             // Check if email does not already exist.
-            if (_clientService.Get(email) != null) return null;
+            if (_clientService.Get(email.Trim()) != null) throw new UsedEmailException();
 
             // Verify email if email is valid
-            if (!EmailHelper.ValidateEmail(email)) return null;
+            if (!EmailHelper.ValidateEmail(email)) throw new InvalidEmailException();
 
             // Verify if password has required complexity
-            if (!PasswordHelper.ValidatePasswordComplexity(password)) return null;
+            if (!PasswordHelper.ValidatePasswordComplexity(password)) throw new InvalidPasswordException();
 
             // Create the new client
             Client c = _clientService.Create(email, PasswordHelper.HashPassword(password), name);

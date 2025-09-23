@@ -1,5 +1,6 @@
 using Grocery.Core.Interfaces.Repositories;
 using Grocery.Core.Interfaces.Services;
+using Grocery.Core.Exceptions;
 using Grocery.Core.Models;
 using Grocery.Core.Services;
 using Grocery.UnitTests.Mocks;
@@ -75,36 +76,33 @@ namespace Grocery.UnitTests
         [InlineData("  ", "Password1!", "Bob Bladerdeeg", "Email with only whitespace")]
         [InlineData("user3@mail.com", "     ", "Bob Bladerdeeg", "Password with only whitespace")]
         [InlineData("user3@mail.com", "Password1!", "   ", "Name with only whitespace")]
-        public void Register_EmptyFields_ReturnsNull(string email, string password, string name, string message)
+        public void Register_EmptyFields_ThrowsException(string email, string password, string name, string message)
         {
-            // Act
-            Client? c = _authService.Register(email, password, name);
-            // Assert
-            Assert.True(c == null, message);
+            // Act & Assert
+            var ex = Record.Exception(() => _authService.Register(email, password, name));
+            Assert.True(ex is ArgumentException, message);
         }
 
         [Theory]
         [InlineData("user1@mail.com", "Used mail")]
         [InlineData(" user1@mail.com", "Used mail with leading space")]
         [InlineData("user1@mail.com ", "Used mail with trailing space")]
-        public void Register_UsedEmail_ReturnsNull(string email, string message)
+        public void Register_UsedEmail_ThrowsException(string email, string message)
         {
-            // Act
-            Client? c = _authService.Register(email, _validPassword, _validName);
-            // Assert
-            Assert.True(c == null, message);
+            // Act & Assert
+            var ex = Record.Exception(() => _authService.Register(email, _validPassword, _validName));
+            Assert.True(ex is UsedEmailException, message);
         }
 
         [Theory]
         [InlineData("use", "No @ symbol and domain")]
         [InlineData("use@", "nothing behing the @")]
         [InlineData("user1@@mail.com", "Two @ symbols")]
-        public void Register_InvalidEmail_ReturnsNull(string email, string message)
+        public void Register_InvalidEmail_ThrowsException(string email, string message)
         {
-            // Act
-            Client? c = _authService.Register(email, _validPassword, _validName);
-            // Assert
-            Assert.True(c == null, message);
+            // Act & Assert
+            var ex = Record.Exception(() => _authService.Register(email, _validPassword, _validName));
+            Assert.True(ex is InvalidEmailException, message);
         }
 
         [Theory]
@@ -115,12 +113,11 @@ namespace Grocery.UnitTests
         [InlineData("AAAAAaaaa1", "No special character")]
         [InlineData(" AAAAAaaaa1!", "Contains space")]
         [InlineData("AAAAA  aaaa1!", "Contains tab")]
-        public void Register_InvalidPassword_ReturnsNull(string password, string message)
+        public void Register_InvalidPassword_ThrowsException(string password, string message)
         {
-            // Act
-            Client? c = _authService.Register(_validUnusedEmail, password, _validName);
-            // Assert
-            Assert.True(c == null, message);
+            // Act & Assert
+            var ex = Record.Exception(() => _authService.Register(_validUnusedEmail, password, _validName));
+            Assert.True(ex is InvalidPasswordException, message);
         }
 
         [Fact]
