@@ -11,9 +11,15 @@ namespace Grocery.UnitTests
     {
         private readonly IAuthService _authService;
 
+        private readonly string _validUsedEmail = "user1@mail.com";
+        private readonly string _validUnusedEmail = "user5@mail.com";
+        private readonly string _validPassword = "Useruser1!";
+        private readonly string _validName = "Bob Bladerdeeg";
+
         // Do "Arrange" section of unit tests in constructor to avoid code duplication.
         public AuthServiceTests()
         {
+            // Arrange
             IClientRepository clientRepository = new MockClientRepository();
             IClientService clientService = new ClientService(clientRepository);
             _authService = new AuthService(clientService);
@@ -23,7 +29,7 @@ namespace Grocery.UnitTests
         public void Login_ValidCredentials_ReturnsClient()
         {
             // Act
-            Client? c = _authService.Login("user1@mail.com", "user1");
+            Client? c = _authService.Login(_validUsedEmail, "user1");
             // Assert
             Assert.NotNull(c);
         }
@@ -32,7 +38,7 @@ namespace Grocery.UnitTests
         public void Login_UnusedEmail_ReturnsNull()
         {
             // Act
-            Client? c = _authService.Login("user5@mail.com", "user2");
+            Client? c = _authService.Login(_validUnusedEmail, "user2");
             // Assert
             Assert.Null(c);
         }
@@ -57,9 +63,73 @@ namespace Grocery.UnitTests
         public void Login_InvalidPasswords_ReturnsNull(string password, string message)
         {
             // Act
-            Client? c = _authService.Login("user1@mail.com", password);
+            Client? c = _authService.Login(_validUsedEmail, password);
             // Assert
             Assert.True(c == null, message);
+        }
+
+        [Theory]
+        [InlineData("", "Password1!", "Bob Bladerdeeg", "Empty email")]
+        [InlineData("user3@mail.com", "", "Bob Bladerdeeg", "Empty password")]
+        [InlineData("user3@mail.com", "Password1!", "", "Empty name")]
+        [InlineData("  ", "Password1!", "Bob Bladerdeeg", "Email with only whitespace")]
+        [InlineData("user3@mail.com", "     ", "Bob Bladerdeeg", "Password with only whitespace")]
+        [InlineData("user3@mail.com", "Password1!", "   ", "Name with only whitespace")]
+        public void Register_EmptyFields_ReturnsNull(string email, string password, string name, string message)
+        {
+            // Act
+            Client? c = _authService.Register(email, password, name);
+            // Assert
+            Assert.True(c == null, message);
+        }
+
+        [Theory]
+        [InlineData("user1@mail.com", "Used mail")]
+        [InlineData(" user1@mail.com", "Used mail with leading space")]
+        [InlineData("user1@mail.com ", "Used mail with trailing space")]
+        public void Register_UsedEmail_ReturnsNull(string email, string message)
+        {
+            // Act
+            Client? c = _authService.Register(email, _validPassword, _validName);
+            // Assert
+            Assert.True(c == null, message);
+        }
+
+        [Theory]
+        [InlineData("use", "No @ symbol and domain")]
+        [InlineData("use@", "nothing behing the @")]
+        [InlineData("user1@@mail.com", "Two @ symbols")]
+        public void Register_InvalidEmail_ReturnsNull(string email, string message)
+        {
+            // Act
+            Client? c = _authService.Register(email, _validPassword, _validName);
+            // Assert
+            Assert.True(c == null, message);
+        }
+
+        [Theory]
+        [InlineData("Aa1!", "Too short")]
+        [InlineData("AAAAAAAA1!", "No lowercase")]
+        [InlineData("aaaaaaa1!", "No uppercase")]
+        [InlineData("AAAAaaaaa!", "No number")]
+        [InlineData("AAAAAaaaa1", "No special character")]
+        [InlineData(" AAAAAaaaa1!", "Contains space")]
+        [InlineData("AAAAA  aaaa1!", "Contains tab")]
+        public void Register_InvalidPassword_ReturnsNull(string password, string message)
+        {
+            // Act
+            Client? c = _authService.Register(_validUnusedEmail, password, _validName);
+            // Assert
+            Assert.True(c == null, message);
+        }
+
+        [Fact]
+        public void Register_ValidCredentials_ReturnsClient()
+        {
+            // Act
+            Client? c = _authService.Register(_validUnusedEmail, _validPassword, _validName);
+            // Assert
+            Assert.NotNull(c);
         }
     }
 }
