@@ -29,7 +29,6 @@ namespace Grocery.Core.Services
 
         public Client Create(string email, string password, string name)
         {
-            // TODO: Make ID correct
             Client client = new Client(-1, name, email, password);
             _clientRepository.Add(client);
             return client;
