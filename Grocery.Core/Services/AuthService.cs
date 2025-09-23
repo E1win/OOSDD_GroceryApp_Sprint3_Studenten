@@ -18,5 +18,25 @@ namespace Grocery.Core.Services
             if (PasswordHelper.VerifyPassword(password, client.Password)) return client;
             return null;
         }
+
+        public Client? Register(string email, string password, string name)
+        {
+            // Check if all fields are filled.
+            if (string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(name) || string.IsNullOrWhiteSpace(password)) return null;
+
+            // Check if email does not already exist.
+            if (_clientService.Get(email) != null) return null;
+
+            // Verify email if email is valid
+            if (!EmailHelper.ValidateEmail(email)) return null;
+
+            // Verify if password has required complexity
+            if (!PasswordHelper.ValidatePasswordComplexity(password)) return null;
+
+            // Create the new client
+            Client c = _clientService.Create(email, PasswordHelper.HashPassword(password), name);
+
+            return c;
+        }
     }
 }
