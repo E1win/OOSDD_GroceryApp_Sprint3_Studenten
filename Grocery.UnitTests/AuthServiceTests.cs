@@ -12,10 +12,10 @@ namespace Grocery.UnitTests
     {
         private readonly IAuthService _authService;
 
-        private readonly string _validUsedEmail = "user1@mail.com";
-        private readonly string _validUnusedEmail = "user5@mail.com";
-        private readonly string _validPassword = "Useruser1!";
-        private readonly string _validName = "Bob Bladerdeeg";
+        private const string _validUsedEmail = "user1@mail.com";
+        private const string _validUnusedEmail = "user5@mail.com";
+        private const string _validPassword = "Useruser1!";
+        private const string _validName = "Bob Bladerdeeg";
 
         // Do "Arrange" section of unit tests in constructor to avoid code duplication.
         public AuthServiceTests()
@@ -45,7 +45,7 @@ namespace Grocery.UnitTests
         }
 
         [Theory]
-        [InlineData("user1@mail.com", "", "Empty password with valid email")]
+        [InlineData(_validUsedEmail, "", "Empty password with valid email")]
         [InlineData("", "user1", "Empty email")]
         [InlineData("", "", "Both fields empty")]
         public void Login_EmptyFields_ReturnsNull(string email, string password, string message)
@@ -70,12 +70,12 @@ namespace Grocery.UnitTests
         }
 
         [Theory]
-        [InlineData("", "Password1!", "Bob Bladerdeeg", "Empty email")]
-        [InlineData("user3@mail.com", "", "Bob Bladerdeeg", "Empty password")]
-        [InlineData("user3@mail.com", "Password1!", "", "Empty name")]
-        [InlineData("  ", "Password1!", "Bob Bladerdeeg", "Email with only whitespace")]
-        [InlineData("user3@mail.com", "     ", "Bob Bladerdeeg", "Password with only whitespace")]
-        [InlineData("user3@mail.com", "Password1!", "   ", "Name with only whitespace")]
+        [InlineData("", _validPassword, _validName, "Empty email")]
+        [InlineData(_validUnusedEmail, "", _validName, "Empty password")]
+        [InlineData(_validUnusedEmail, _validPassword, "", "Empty name")]
+        [InlineData("  ", _validPassword, _validName, "Email with only whitespace")]
+        [InlineData(_validUnusedEmail, "     ", _validName, "Password with only whitespace")]
+        [InlineData(_validUnusedEmail, _validPassword, "   ", "Name with only whitespace")]
         public void Register_EmptyFields_ThrowsException(string email, string password, string name, string message)
         {
             // Act & Assert
@@ -84,9 +84,9 @@ namespace Grocery.UnitTests
         }
 
         [Theory]
-        [InlineData("user1@mail.com", "Used mail")]
-        [InlineData(" user1@mail.com", "Used mail with leading space")]
-        [InlineData("user1@mail.com ", "Used mail with trailing space")]
+        [InlineData(_validUsedEmail, "Used mail")]
+        [InlineData($" {_validUsedEmail}", "Used mail with leading space")]
+        [InlineData($"{_validUsedEmail} ", "Used mail with trailing space")]
         public void Register_UsedEmail_ThrowsException(string email, string message)
         {
             // Act & Assert
