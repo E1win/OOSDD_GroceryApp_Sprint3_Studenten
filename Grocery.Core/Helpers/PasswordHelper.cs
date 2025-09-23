@@ -29,14 +29,17 @@ namespace Grocery.Core.Helpers
             // Check if password is between minimum and maximum required length
             if (password.Length < 8 || password.Length > 255) return false;
 
-            // Check if password contains number
+            // Password must contain number
             if (!password.Any(char.IsDigit)) return false;
 
-            // Check if password contains lowercase and lowercase letters
+            // Password must contain uppercase and lowercase letter
             if (!password.Any(char.IsLower) || !password.Any(char.IsUpper)) return false;
 
-            // Check if password contains special character
-            if (!password.Any(char.IsSymbol)) return false;
+            // Password must contain special character
+            if (!password.Any(ch => char.IsSymbol(ch) || char.IsPunctuation(ch))) return false;
+
+            // Password may not contain whitespace
+            if (password.Any(char.IsWhiteSpace)) return false;
 
             return true;
         }
