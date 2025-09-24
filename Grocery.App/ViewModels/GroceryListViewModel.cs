@@ -10,12 +10,14 @@ namespace Grocery.App.ViewModels
     {
         public ObservableCollection<GroceryList> GroceryLists { get; set; }
         private readonly IGroceryListService _groceryListService;
+        private readonly GlobalViewModel _global;
 
-        public GroceryListViewModel(IGroceryListService groceryListService) 
+        public GroceryListViewModel(IGroceryListService groceryListService, GlobalViewModel global) 
         {
-            Title = "Boodschappenlijst";
             _groceryListService = groceryListService;
-            GroceryLists = new(_groceryListService.GetAll());
+            _global = global;
+            GroceryLists = new(_groceryListService.GetAll(_global.Client.Id));
+            Title = $"Boodschappenlijst van {_global.Client.Name}";
         }
 
         [RelayCommand]
@@ -27,7 +29,7 @@ namespace Grocery.App.ViewModels
         public override void OnAppearing()
         {
             base.OnAppearing();
-            GroceryLists = new(_groceryListService.GetAll());
+            GroceryLists = new(_groceryListService.GetAll(_global.Client.Id));
         }
 
         public override void OnDisappearing()

@@ -1,17 +1,15 @@
-# GroceryApp sprint3 Studentversie  
-    
-## UC07 Delen boodschappenlijst  
-Is compleet  
-  
-## UC08 Zoeken producten  
-Aanvullen:
-- In de GroceryListItemsView zitten twee Collection Views, namelijk één voor de inhoud van de boodschappenlijst en één voor producten die je toe kunt voegen aan de boodschappenlijst  
-- Voeg boven de tweede CollectionView een zoekveld (SearchBar) in om op producten te kunnen zoeken.  
-- Zorg dat de SearchCommand wordt gebonden aan een functie in het onderliggende ViewModel (GroceryListItemsViewModel) en dat de zoekterm die in het zoekveld is ingetypt gebruikt wordt als parameter (SearchCommandParameter).  
-- Werk in het viewModel (GroceryListItemsViewModel) de zoekfunctie uit en zorg dat de beschikbare producten worden gefilterd op de zoekterm!  
+# GroceryApp 
 
-## UCx Registratie gebruiker 
-Of een ander idee zelf uitwerken. Dit betekent ook dat de documentatie hiervoor ontwikkeld moet worden.
+MAUI applicatie voor boodschappenlijsten.
 
-  
+## Versiebeheer methodiek
+In deze repository wordt de Gitflow branching strategie gebruikt. Hiervoor worden de onderstaande branches gebruikt:
 
+- `main` - Op deze branch wordt alleen code gezet die klaar is voor productie. Er wordt alleen met deze branch gemerged d.m.v. pull requests. Alle nieuwe toevoegingen aan deze branch zijn voor een release. Alleen de hotfix en release branches maken pull requests naar de main-branch.
+- `develop` - Feature-branches worden gemaakt vanuit deze branch en worden na voltooiing met een pull requests hierin gemerged wanneer ze klaar zijn voor het testen.
+- `release/[release_nummer]` - Release-branches worden gebruikt ter voorbereiding van nieuwe releases. Deze branch wordt aangemaakt vanuit de develop-branch met alle features die met de nieuwe release mee gaan. Hierna worden er op de release-branch alleen kleine bugfixes en aanpassingen gedaan. Wanneer de release gereed is wordt het d.m.v. een pull request met de main-branch gemerged.
+- `feature/[feature_naam]` - Feature-branches worden gebruikt voor alle nieuwe features. De branches worden gemaakt vanuit de develop-branch en wanneer ze gereed zijn met een pull request teruggevoegd.
+- `hotfix/[hotfix_naam]` - Deze branch wordt gebruikt wanneer er snel belangrijke veranderingen nodig zijn in de main-branch. Deze veranderingen moeten ook met de develop-branch worden gemerged om te voorkomen dat de bug opnieuw wordt geïntroduceerd.
+- `bugfix/[bugfix_naam]` - Bugs met een minder hoge prioriteit worden met deze branches opgelost. In tegenstelling tot hotfixes, wordt bij bugfixes wel het standaard gitflow proces gebruikt. De branches worden dus aangemaakt vanuit develop en d.m.v. een pull request terug gemerged wanneer ze klaar zijn.
+
+Pull requests op de main-, develop- en release-branches worden pas geaccepteerd nadat de pipeline tests een succesvol resultaat teruggeven.
